@@ -1,15 +1,18 @@
-import Image from "next/image";
-import { getTemplatesTesting } from "@/features/templates/queries/get-templates-testing";
-
+import Headings from "@/components/Headings";
+import NewestTemplates from "@/features/templates/components/NewestTemplates";
+import HeroCarousel from "@/features/templates/components/HeroCarousel";
+import { getCarouselTemplates } from "@/features/templates/queries/get-carousel-templates";
 export default async function Home() {
-  const templates = await getTemplatesTesting();
+  const homeCarouselTemplates = await getCarouselTemplates();
   return (
-    <div className="flex flex-col flex-1 items-center justify-center">
-        {templates.map((template) => (
-            <div key={template.id}>
-                template name: {template.name}
-            </div>
-        ))}
-    </div>
+    <>
+        <HeroCarousel templates={homeCarouselTemplates} />
+        <div className="flex flex-col flex-1 bg-popover w-[80%] mx-auto">
+            <Headings title="熱門主題" subtitle="即時" />
+                <Headings title="熱門標籤" />
+                <Headings title="最近更新" />
+                <NewestTemplates />
+        </div>
+    </>
   );
 }
