@@ -1,0 +1,32 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../app/generated/prisma"
+  previewFeatures = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["public"]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model templates {
+  id                  String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  slug                String    @unique
+  name                String
+  tags                String[]  @default([])
+  settings            Json      @default("{}")
+  media_type          String    @default("image")
+  image_url           String?
+  video_url           String?
+  view_count          Int?      @default(0)
+  last_viewed_at      DateTime? @db.Timestamptz(6)
+  views_last_24h      Int?      @default(0)
+  views_last_7d       Int?      @default(0)
+  views_last_30d      Int?      @default(0)
+  last_stats_update   DateTime? @db.Timestamptz(6)
+  created_at          DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@schema("public")
+}
