@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 
-export const getCarouselTemplates = async () => {
+export const getHomePopularTemplates = async () => {
   const templates = await prisma.templates.findMany({
-    take: 6,
+    take: 20,
     orderBy: {
       view_count: "desc",
     },
