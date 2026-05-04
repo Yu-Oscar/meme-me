@@ -19,7 +19,11 @@ export default async function Home() {
     <>
       <HeroCarousel templates={mainCarouselTemplates} />
       <div className="flex flex-col flex-1 bg-popover w-[80%] mx-auto gap-y-2">
-        <Headings title="熱門主題" subtitle="即時" href={PopularTemplatesPath()} />
+        <Headings
+          title="熱門主題"
+          subtitle="即時"
+          href={PopularTemplatesPath()}
+        />
         <PopularTemplates templates={popularCarouselTemplates} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">

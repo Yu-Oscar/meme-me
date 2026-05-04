@@ -14,7 +14,7 @@ export default function TagItem({ tag }: TagItemProps) {
           <div className="flex items-center justify-between gap-2">
             <div className="flex-1 min-w-0">
               <p className="text-sm sm:text-base text-zinc-100 font-semibold truncate group-hover:text-primary-400 transition-colors">
-                <span className="text-primary-400">#</span>
+                <span className="text-primary">#</span>
                 {tag.tag}
               </p>
             </div>

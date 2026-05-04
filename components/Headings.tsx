@@ -10,9 +10,9 @@ export default function Headings({ title, subtitle, href }: HeadingProps) {
     return (
       <div className="flex items-end justify-between mb-4">
         <div>
-          <h4 className="text-sm text-neutral-400 font-medium mb-1">即時</h4>
+          <h4 className="text-sm text-neutral-400 font-medium mb-1">{subtitle}</h4>
           <h2 className="text-2xl sm:text-3xl text-neutral-100 font-bold ">
-            熱門主題
+            {title}
           </h2>
         </div>
         {href && (
