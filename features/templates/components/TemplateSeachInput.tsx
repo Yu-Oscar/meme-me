@@ -1,18 +1,11 @@
 'use client';
 import { Input } from "@/components/ui/input";
-import { useQueryState } from "nuqs";
-import { searchParser } from "@/features/templates/search-params";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function TemplateSeachInput() {
-  const [search , setSearch] = useQueryState("search", searchParser);
-  const [value, setValue] = useState(search);
-
-  useEffect(() => {
-    setValue(search);
-  }, [search]);
-
-
+  const [value, setValue] = useState("");
+  const router = useRouter();
 
   return (
     <Input
@@ -24,7 +17,7 @@ export default function TemplateSeachInput() {
       }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
-          setSearch(value);
+          router.push(`/search?search=${value}`);
         }
       }}
       className="w-full max-w-md"

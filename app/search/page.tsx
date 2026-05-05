@@ -25,9 +25,6 @@ export default async function PopularTemplatesPage({
     ParsedSearchParams,
     ParsedSearchParams.sort,
   );
-  
-  console.log(list);
-  console.log(metadata);
 
   return (
     <div className="container mx-auto px-20 py-8">
