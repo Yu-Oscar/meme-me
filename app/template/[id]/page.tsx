@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTemplate } from "@/features/templates/queries/get-template";
 import Image from "next/image";
-
+import Link from "next/link";
 
 export default async function TemplatePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -24,12 +24,12 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
             <p className="text-sm text-gray-500">from user</p>
             <div className="flex flex-row gap-2 ">
             {template.tags.map((tag) => (
-              <div key={tag}>
+              <Link href={`/search?search=${tag}`} key={tag}>
                 <p className="text-sm sm:text-base text-zinc-100 font-semibold truncate group-hover:text-primary-400 transition-colors">
                   <span className="text-primary">#</span>
                   {tag}
                 </p>
-              </div>
+              </Link>
             ))}
             </div>
           </div>

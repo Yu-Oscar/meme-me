@@ -7,13 +7,20 @@ export const getTemplates = async (parsed: ParsedSearchParams, orderBy?: string)
     const skip = page * size;
 
     const where = {
-      ...(typeof parsed.search === "string" && {
-        name: {
-          contains: parsed.search,
-          mode: "insensitive" as const,
+        OR: [
+        {
+            name: {
+            contains: parsed.search,
+            mode: "insensitive" as const,
+            },
         },
-      }),
-    };
+        {
+            tags: {
+            has: parsed.search, // exact tag match
+            },
+        },
+        ],
+    }
 
     const [templates, count] = await prisma.$transaction([
       prisma.templates.findMany({
