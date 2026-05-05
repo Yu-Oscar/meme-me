@@ -11,11 +11,10 @@ interface PopularTemplatesPageProps {
   searchParams: Promise<SearchParams>;
 }
 
-export const PopularSortOptions = [
-  { value: "views_last_24h", label: "本日" },
-  { value: "views_last_7d", label: "本週" },
-  { value: "views_last_30d", label: "本月" },
+export const SearchSortOptions = [
+  { value: "views_last_24h", label: "即時熱門" },
   { value: "view_count", label: "全部時間" },
+  { value: "created_at", label: "最新發布" },
 ] as sortOptionsType; 
 
 export default async function PopularTemplatesPage({
@@ -26,11 +25,14 @@ export default async function PopularTemplatesPage({
     ParsedSearchParams,
     ParsedSearchParams.sort,
   );
+  
+  console.log(list);
+  console.log(metadata);
 
   return (
     <div className="container mx-auto px-20 py-8">
-      <Headings title="熱門主題" />
-      <TemplateTabs sortOptions={PopularSortOptions} />
+      <Headings title={`${ParsedSearchParams.search}`} subtitle={`搜尋結果`} />
+      <TemplateTabs sortOptions={SearchSortOptions} />
       <TemplateList templates={list} />
       <TemplatePagination metadata={metadata} />
     </div>

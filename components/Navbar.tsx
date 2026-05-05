@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { HomePath, PopularTemplatesPath, NewestTemplatesPath, TagPath } from "@/utils/path";
+import TemplateSeachInput from "@/features/templates/components/TemplateSeachInput";
+
 export default function Navbar() {
   return (
     <div className="h-20 flex items-center justify-between px-30 bg-background/50">
@@ -33,6 +35,7 @@ export default function Navbar() {
             標籤
         </Link>
       </div>
+      <TemplateSeachInput />
     </div>
   );
 }
