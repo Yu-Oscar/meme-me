@@ -18,7 +18,7 @@ export default function HeroCarousel({ templates }: HeroCarouselProps) {
         centeredSlides
         normalizeSlideIndex={false}
         autoHeight
-        preventClicks={false}
+        preventClicks={true}
         preventClicksPropagation={false}
         breakpoints={{
           640: { slidesPerView: 2.25 },
