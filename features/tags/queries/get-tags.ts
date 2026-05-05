@@ -1,11 +1,12 @@
 import { prisma } from "@/lib/prisma";
+import { cache } from "react";
 
 export type TagWithCount = {
   tag: string;
   templateCount: number;
 };
 
-export const getTags = async (): Promise<TagWithCount[]> => {
+export const getTags = cache(async (): Promise<TagWithCount[]> => {
   const rows = await prisma.$queryRaw<TagWithCount[]>`
     SELECT
       u.tag AS tag,
@@ -18,4 +19,4 @@ export const getTags = async (): Promise<TagWithCount[]> => {
   `;
 
   return rows;
-};
+});
