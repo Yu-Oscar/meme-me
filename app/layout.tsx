@@ -4,6 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Toaster } from "@/components/ui/sonner";
+import RedirectToast from "@/components/RedirectToast";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -44,7 +46,10 @@ export default function RootLayout({
         <NuqsAdapter>
           <Navbar />
           {children}
+
+          <Toaster expand />
         </NuqsAdapter>
+        <RedirectToast />
       </body>
     </html>
   );
