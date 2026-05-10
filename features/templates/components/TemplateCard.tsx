@@ -2,14 +2,16 @@ import type { templates } from "@/app/generated/prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { EyeIcon } from "lucide-react";
+import Bookmark from "@/features/bookmarks/components/Bookmark";
 
 type TemplateCardProps = {
-    template: templates;
+  template: templates;
+  isBookmarked?: boolean;
 }
 
-export default function TemplateCard({ template }: TemplateCardProps) {
+export default function TemplateCard({ template, isBookmarked = false }: TemplateCardProps) {
     return (
-      <div key={template.id} className="flex flex-col group">
+      <div key={template.id} className="relative flex flex-col group">
         <Link href={`/template/${template.slug}`} className="relative">
           <div className="relative aspect-video rounded-lg overflow-hidden">
             <Image
@@ -33,6 +35,7 @@ export default function TemplateCard({ template }: TemplateCardProps) {
           <EyeIcon className="w-3.5 h-3.5" />
           {template.view_count?.toLocaleString() ?? 0}
         </span>
+        <Bookmark id={template.id} isBookmarked={isBookmarked} />
       </div>
     );
 }

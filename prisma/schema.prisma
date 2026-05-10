@@ -31,6 +31,8 @@ model templates {
   userId              Int       @default(1)
   user                user @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  bookmarks bookmark[]
+
   @@index([userId])
   @@schema("public")
 }
@@ -45,7 +47,9 @@ model user {
 
   sessions      session[]
   templates     templates[]
+  bookmarks     bookmark[]
 
+  @@index([id])
   @@schema("public")
 }
 
@@ -56,5 +60,18 @@ model session {
   user        user @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@schema("public")
+}
+
+model bookmark {
+  userId      Int
+  templateId  String   @db.Uuid
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  user      user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  template  templates @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@id([userId, templateId])
+  @@index([templateId])
   @@schema("public")
 }

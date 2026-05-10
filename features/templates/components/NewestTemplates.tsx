@@ -1,16 +1,22 @@
-import { getHomeNewestTemplates } from "../queries/get-home-newest-templates";
 import type { templates } from "@/app/generated/prisma/client";
 import TemplateCard from "./TemplateCard";
 
 interface NewestTemplatesProps {
     templates: templates[];
+    bookmarkedTemplateIds?: string[];
 }
 
-export default async function NewestTemplates({ templates }: NewestTemplatesProps) {
+export default function NewestTemplates({ templates, bookmarkedTemplateIds = [] }: NewestTemplatesProps) {
+    const bookmarkedTemplateIdSet = new Set(bookmarkedTemplateIds);
+
     return (
         <div className="grid grid-cols-4 gap-4">
             {templates.map((template) => (
-                <TemplateCard key={template.id} template={template} />
+                <TemplateCard
+                    key={template.id}
+                    template={template}
+                    isBookmarked={bookmarkedTemplateIdSet.has(template.id)}
+                />
                 ))} 
             </div>
         );
