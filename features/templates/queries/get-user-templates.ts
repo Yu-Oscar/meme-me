@@ -1,10 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
 
-export const getTemplate = cache(async (id: string) => {
-  const template = await prisma.templates.findUnique({
+export const getUserTemplates = cache(async (userId: number) => {
+  return prisma.templates.findMany({
     where: {
-      slug: id,
+      userId: userId,
+    },
+    orderBy: {
+      created_at: "desc",
     },
     include: {
       user: {
@@ -14,6 +17,4 @@ export const getTemplate = cache(async (id: string) => {
       },
     },
   });
-  return { template };
 });
-

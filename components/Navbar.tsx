@@ -7,6 +7,7 @@ import { signOut } from "@/features/auth/actions/sign-out";
 import { Form } from "lucide-react";
 import { SubmitButton } from "./form/SubmitButton";
 import { getAuth } from "@/features/auth/queries/get-auth";
+import AccountDropdown from "./AccountDropdown";
 
 export default async function Navbar() {
   const { session, user } = await getAuth();
@@ -27,9 +28,9 @@ export default async function Navbar() {
 
   const AuthItems = user ? (
     <>
-      <form action={signOut}>
-        <SubmitButton label="Sign Out" variant="default" />
-      </form>
+      <AccountDropdown
+        user={user}
+      />
     </>
   ) : (
     <>

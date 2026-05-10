@@ -1,13 +1,20 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getTemplate } from "@/features/templates/queries/get-template";
 import Image from "next/image";
 import Link from "next/link";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { HomePath } from "@/utils/path";
 
 export default async function TemplatePage({ params }: { params: Promise<{ id: string }> }) {
+    const user = await getAuthOrRedirect();
+    
     const { id } = await params;
     const { template } = await getTemplate(id);
     if (!template) {
         return notFound();
+    }
+    if (user.id !== template.userId) {
+      redirect(HomePath());
     }
     return (
       <div className="flex flex-1 flex-row gap-4 py-4">

@@ -6,3 +6,6 @@ export const PopularTemplatesPath = () => "/popular";
 export const signUpPath = () => "/sign-up";
 export const signInPath = () => "/sign-in";
 export const passwordForgotPath = () => "/forgot-password";
+
+export const accountProfilePath = (id: number) => `/profile/${id}`;
+export const accountBookmarksPath = () => "/bookmarks";
