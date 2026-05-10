@@ -4,12 +4,12 @@ import Link from "next/link";
 import { EyeIcon } from "lucide-react";
 import Bookmark from "@/features/bookmarks/components/Bookmark";
 
-type TemplateCardProps = {
+type TemplateListItemProps = {
   template: templates;
   isBookmarked?: boolean;
 }
 
-export default function TemplateCard({ template, isBookmarked = false }: TemplateCardProps) {
+export default function TemplateListItem({ template, isBookmarked = false }: TemplateListItemProps) {
     return (
       <div key={template.id} className="relative flex flex-col group">
         <Link href={`/template/${template.slug}`} className="relative">
@@ -35,7 +35,11 @@ export default function TemplateCard({ template, isBookmarked = false }: Templat
           <EyeIcon className="w-3.5 h-3.5" />
           {template.view_count?.toLocaleString() ?? 0}
         </span>
-        <Bookmark id={template.id} isBookmarked={isBookmarked} />
+        <Bookmark
+          id={template.id}
+          isBookmarked={isBookmarked}
+          className="absolute top-2 right-2"
+        />
       </div>
     );
 }

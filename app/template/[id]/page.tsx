@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import { getTemplate } from "@/features/templates/queries/get-template";
 import Image from "next/image";
 import Link from "next/link";
+import { getAuth } from "@/features/auth/queries/get-auth";
+import { getTemplateBookmarked } from "@/features/bookmarks/queries/get-template-bookmarked";
+import TemplateDescription from "@/features/templates/components/TemplateDescription";
 
 export default async function TemplatePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -9,6 +12,10 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
     if (!template) {
         return notFound();
     }
+    const { user } = await getAuth();
+    const isBookmarked = user ? await getTemplateBookmarked(template.id, user.id) : false;
+
+
     return (
       <div className="flex flex-1 flex-row gap-4 py-4">
         <div className="flex flex-col gap-4 w-[70%] px-24">
@@ -19,20 +26,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
             height={1000}
             className="rounded-lg"
           />
-          <div className="flex flex-col gap-2">
-            <h1 className="text-2xl font-bold">{template.name}</h1>
-            <p className="text-sm text-gray-500">from {template.user.username}</p>
-            <div className="flex flex-row gap-2 ">
-            {template.tags.map((tag) => (
-              <Link href={`/search?search=${tag}`} key={tag}>
-                <p className="text-sm sm:text-base text-zinc-100 font-semibold truncate group-hover:text-primary-400 transition-colors">
-                  <span className="text-primary">#</span>
-                  {tag}
-                </p>
-              </Link>
-            ))}
-            </div>
-          </div>
+          <TemplateDescription template={template} isBookmarked={isBookmarked ?? false} />
         </div>
         <div className="flex flex-col gap-4 w-[30%] mx-auto">other</div>
       </div>

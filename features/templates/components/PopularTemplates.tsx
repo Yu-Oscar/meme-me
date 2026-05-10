@@ -1,5 +1,5 @@
 import type { templates } from "@/app/generated/prisma/client";
-import TemplateCard from "./TemplateCard";
+import TemplateCard from "./TemplateListItem";
 import PopularTemplatesCarousel from "./PopularTemplatesCarousel";
 
 interface PopularTemplatesProps {

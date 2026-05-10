@@ -2,14 +2,16 @@
 
 import { LucideBookmark, LucideLoaderCircle } from "lucide-react";
 import { useTransition } from "react";
-import { addBookmark } from "../actions/add-bookmark";
+import { addBookmark } from "../actions/toggle-bookmark";
+import { cn } from "@/lib/utils";
 
 type BookmarkProps = {
   id: string;
   isBookmarked: boolean;
+  className?: string;
 }
 
-export default function Bookmark({ id, isBookmarked }: BookmarkProps) {
+export default function Bookmark({ id, isBookmarked, className }: BookmarkProps) {
   const [pending, startTransition] = useTransition();
 
   return (
@@ -22,7 +24,10 @@ export default function Bookmark({ id, isBookmarked }: BookmarkProps) {
           await addBookmark(id);
         });
       }}
-      className="absolute top-2 right-2 cursor-pointer rounded p-0.5 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-70"
+      className={cn(
+        "cursor-pointer rounded p-0.5 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-70",
+        className,
+      )}
     >
       {pending ? (
         <LucideLoaderCircle className="animate-spin text-primary" />
