@@ -22,7 +22,7 @@ type AccountDropdownProps = {
 
 export default function AccountDropdown({ user }: AccountDropdownProps) {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <button
           type="button"

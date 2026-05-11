@@ -2,6 +2,7 @@ import { templates } from "@/app/generated/prisma/client";
 import Link from "next/link";
 import Bookmark from "@/features/bookmarks/components/Bookmark";
 import { user } from "@/app/generated/prisma/client";
+import { MemeEditorDownloadAction } from "@/features/templates/components/MemeEditor";
 
 type TemplateDescriptionProps = {
     template: templates & { user: { username: string } };
@@ -33,11 +34,13 @@ export default function TemplateDescription({ template, isBookmarked }: Template
             ))}
           </div>
         </div>
-        <Bookmark
-          id={template.id}
-          isBookmarked={isBookmarked ?? false}
-          className="self-start"
-        />
+        <div className="flex flex-row items-center gap-1 self-start">
+          <MemeEditorDownloadAction />
+          <Bookmark
+            id={template.id}
+            isBookmarked={isBookmarked ?? false}
+          />
+        </div>
       </div>
     );
 }
