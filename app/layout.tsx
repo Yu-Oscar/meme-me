@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -43,6 +45,18 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col bg-popover">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-D1BPB4LCN8"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag-manager" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-D1BPB4LCN8');
+          `}
+        </Script>
         <NuqsAdapter>
           <Navbar />
           {children}
@@ -50,6 +64,7 @@ export default function RootLayout({
           <Toaster expand />
         </NuqsAdapter>
         <RedirectToast />
+        <Analytics />
       </body>
     </html>
   );
