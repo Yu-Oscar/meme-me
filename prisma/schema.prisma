@@ -31,8 +31,21 @@ model templates {
   user                user @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   bookmarks bookmark[]
+  template_views template_view[]
 
   @@index([userId])
+  @@schema("public")
+}
+
+model template_view {
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  templateId String   @map("template_id") @db.Uuid
+  viewed_at  DateTime @default(now()) @map("viewed_at") @db.Timestamptz(6)
+
+  template templates @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([templateId, viewed_at])
+  @@map("template_view")
   @@schema("public")
 }
 

@@ -7,6 +7,7 @@ import { getBookmarkedTemplateIds } from "@/features/bookmarks/queries/get-bookm
 import TemplateDescription from "@/features/templates/components/TemplateDescription";
 import RecommendedItem from "@/features/templates/components/RecommendedItem";
 import TemplateMediaThumb from "@/features/templates/components/TemplateMediaThumb";
+import { recordTemplateVisit } from "@/features/templates/queries/record-template-visit";
 import {
   MemeEditorProvider,
   MemeEditorSidebar,
@@ -24,6 +25,8 @@ export default async function TemplatePage({
   if (!template) {
     return notFound();
   }
+
+  await recordTemplateVisit(template.id);
   const { user } = await getAuth();
   const [isBookmarked, recommended, bookmarkedTemplateIds] = await Promise.all([
     user ? getTemplateBookmarked(template.id, user.id) : Promise.resolve(false),

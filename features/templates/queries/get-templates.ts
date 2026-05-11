@@ -23,7 +23,7 @@ export const getTemplates = cache(async (parsed: ParsedSearchParams, orderBy?: s
     ],
   };
 
-  const [templates, count] = await prisma.$transaction([
+  const [templates, count] = await Promise.all([
     prisma.templates.findMany({
       where,
       take: size,
