@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { EyeIcon } from "lucide-react";
 import Bookmark from "@/features/bookmarks/components/Bookmark";
+import { cn } from "@/lib/utils";
 
 type TemplateListItemProps = {
   template: templates;
@@ -38,7 +39,10 @@ export default function TemplateListItem({ template, isBookmarked = false }: Tem
         <Bookmark
           id={template.id}
           isBookmarked={isBookmarked}
-          className="absolute top-2 right-2"
+          className={cn(
+            "absolute top-2 right-2 transition-opacity",
+            isBookmarked ? "opacity-100" : "opacity-0 group-hover:opacity-100",
+          )}
         />
       </div>
     );
