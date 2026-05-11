@@ -1,7 +1,7 @@
 import type { templates } from "@/app/generated/prisma/client";
-import Image from "next/image";
 import Link from "next/link";
 import { EyeIcon } from "lucide-react";
+import TemplateMediaThumb from "@/features/templates/components/TemplateMediaThumb";
 
 type RecommendedItemProps = {
   template: templates;
@@ -14,9 +14,8 @@ export default function RecommendedItem({ template }: RecommendedItemProps) {
         href={`/template/${template.slug}`}
         className="relative aspect-video w-36 shrink-0 overflow-hidden rounded-md ring-1 ring-transparent transition-[ring-color,box-shadow] group-hover:shadow-md group-hover:shadow-black/25 group-hover:ring-primary-400/40"
       >
-        <Image
-          src={template.image_url ?? ""}
-          alt={template.name}
+        <TemplateMediaThumb
+          template={template}
           fill
           sizes="144px"
           className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.04]"

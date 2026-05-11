@@ -1,9 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 import { getTemplate } from "@/features/templates/queries/get-template";
-import Image from "next/image";
 import Link from "next/link";
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { HomePath } from "@/utils/path";
+import TemplateMediaThumb from "@/features/templates/components/TemplateMediaThumb";
 
 export default async function TemplatePage({ params }: { params: Promise<{ id: string }> }) {
     const user = await getAuthOrRedirect();
@@ -19,9 +19,8 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
     return (
       <div className="flex flex-1 flex-row gap-4 py-4">
         <div className="flex flex-col gap-4 w-[70%] px-24">
-          <Image
-            src={template.image_url ?? ""}
-            alt={template.name}
+          <TemplateMediaThumb
+            template={template}
             width={1000}
             height={1000}
             className="rounded-lg"

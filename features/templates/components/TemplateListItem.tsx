@@ -1,9 +1,9 @@
 import type { templates } from "@/app/generated/prisma/client";
-import Image from "next/image";
 import Link from "next/link";
 import { EyeIcon } from "lucide-react";
 import Bookmark from "@/features/bookmarks/components/Bookmark";
 import { cn } from "@/lib/utils";
+import TemplateMediaThumb from "@/features/templates/components/TemplateMediaThumb";
 
 type TemplateListItemProps = {
   template: templates;
@@ -15,9 +15,8 @@ export default function TemplateListItem({ template, isBookmarked = false }: Tem
       <div key={template.id} className="relative flex flex-col group">
         <Link href={`/template/${template.slug}`} className="relative">
           <div className="relative aspect-video rounded-lg overflow-hidden">
-            <Image
-              src={template.image_url ?? ""}
-              alt={template.name}
+            <TemplateMediaThumb
+              template={template}
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
               className="object-cover"

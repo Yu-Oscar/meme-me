@@ -2,8 +2,8 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import type { templates } from "@/app/generated/prisma/client";
-import Image from "next/image";
 import Link from "next/link";
+import TemplateMediaThumb from "@/features/templates/components/TemplateMediaThumb";
 
 interface HeroCarouselProps {
   templates: templates[];
@@ -30,12 +30,11 @@ export default function HeroCarousel({ templates }: HeroCarouselProps) {
         {templates.map((template) => (
           <SwiperSlide key={template.id} className="bg-background rounded-lg overflow-hidden">
             <Link href={`/template/${template.slug}`}>
-                <Image
-                src={template.image_url ?? ""}
-                alt={template.name}
-                width={1000}
-                height={1000}
-                    className="aspect-video w-full h-full object-contain"
+                <TemplateMediaThumb
+                  template={template}
+                  width={1000}
+                  height={1000}
+                  className="aspect-video w-full h-full object-contain"
                 />
             </Link>
           </SwiperSlide>

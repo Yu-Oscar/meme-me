@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import { getTemplate } from "@/features/templates/queries/get-template";
 import { getRecommendedTemplatesByTagOverlap } from "@/features/templates/queries/get-recommended-templates-by-tag-overlap";
-import Image from "next/image";
 import { getAuth } from "@/features/auth/queries/get-auth";
 import { getTemplateBookmarked } from "@/features/bookmarks/queries/get-template-bookmarked";
 import { getBookmarkedTemplateIds } from "@/features/bookmarks/queries/get-bookmarked-template-ids";
 import TemplateDescription from "@/features/templates/components/TemplateDescription";
 import RecommendedItem from "@/features/templates/components/RecommendedItem";
+import TemplateMediaThumb from "@/features/templates/components/TemplateMediaThumb";
 import {
   MemeEditorProvider,
   MemeEditorSidebar,
@@ -33,11 +33,11 @@ export default async function TemplatePage({
   const bookmarkedSet = new Set(bookmarkedTemplateIds);
 
   const isVideoEditable =
-    template.media_type === "gif" && Boolean(template.video_url);
+    template.media_type === "gif" && Boolean(template.media_url);
   const isImageEditable =
     !isVideoEditable &&
     template.media_type === "image" &&
-    Boolean(template.image_url);
+    Boolean(template.media_url);
   const initialSettings = parseTemplateSettings(template.settings);
 
   const recommendedSection =
@@ -54,9 +54,7 @@ export default async function TemplatePage({
 
   if (isVideoEditable || isImageEditable) {
     const mediaKind = isVideoEditable ? "video" : "image";
-    const mediaUrl = (
-      isVideoEditable ? template.video_url : template.image_url
-    )!;
+    const mediaUrl = template.media_url!;
     return (
       <MemeEditorProvider
         mediaKind={mediaKind}
@@ -87,9 +85,8 @@ export default async function TemplatePage({
   return (
     <div className="container mx-auto flex flex-1 flex-col gap-4 py-4 md:flex-row">
       <div className="flex w-full flex-col gap-4 md:w-[70%]">
-        <Image
-          src={template.image_url ?? ""}
-          alt={template.name}
+        <TemplateMediaThumb
+          template={template}
           width={1000}
           height={1000}
           className="rounded-lg"

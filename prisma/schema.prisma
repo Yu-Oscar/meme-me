@@ -17,8 +17,7 @@ model templates {
   tags                String[]  @default([])
   settings            Json      @default("{}")
   media_type          String    @default("image")
-  image_url           String?
-  video_url           String?
+  media_url           String?
   view_count          Int?      @default(0)
   last_viewed_at      DateTime? @db.Timestamptz(6)
   views_last_24h      Int?      @default(0)
