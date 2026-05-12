@@ -36,22 +36,22 @@ export default function AccountDropdown({ user }: AccountDropdownProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" collisionPadding={8} className="w-56">
         <DropdownMenuGroup>
-          <DropdownMenuLabel className="text-sm font-medium text-foreground">
+          <DropdownMenuLabel className="text-sm font-medium text-foreground p-2">
             #{user.id.toString()} {user.username}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem className="p-2">
             <LucideUser />
             <Link href={accountProfilePath(user.id)}>個人頁面</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="p-2">
             <LucideBookmark />
             <Link href={accountBookmarksPath()}>收藏</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="p-2">
             <form action={signOut}>
               <SubmitButton label="Sign Out" />
             </form>

@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 
 type Page= {
@@ -13,9 +14,15 @@ type PaginationProps = {
     count: number;
     hasNextPage: boolean;
   };
+  className?: string;
 };
 
-export default function Pagination({ page, setPage, metadata }: PaginationProps) {
+export default function Pagination({
+  page,
+  setPage,
+  metadata,
+  className,
+}: PaginationProps) {
 
     const WINDOW = 5;
     const lastPageIndex = Math.ceil(metadata.count / 2) - 1;
@@ -63,10 +70,15 @@ export default function Pagination({ page, setPage, metadata }: PaginationProps)
     );
 
   return (
-    <div className="flex flex-row gap-y-2 items-center w-full mt-4 gap-x-2">
-        {PreviousButton}
-        {PageButtons}
-        {NextButton}
+    <div
+      className={cn(
+        "mt-4 flex w-full flex-row flex-wrap items-center justify-center gap-x-2 gap-y-2",
+        className,
+      )}
+    >
+      {PreviousButton}
+      {PageButtons}
+      {NextButton}
     </div>
   );
 }

@@ -13,7 +13,7 @@ export default async function AccountProfilePage({ params }: { params: Promise<{
   ]);
 
   return (
-    <div className="container mx-auto px-20 py-8">
+    <div className="container mx-auto px-4 sm:px-20 py-8">
       <Headings title={`#${id} ${templates[0].user.username}`} />
       <TemplateList
         templates={templates}

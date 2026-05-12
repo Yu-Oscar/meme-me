@@ -34,7 +34,7 @@ export default async function PopularTemplatesPage({
   ]);
 
   return (
-    <div className="container mx-auto px-20 py-8">
+    <div className="container mx-auto px-4 sm:px-20 py-8">
       <Headings title="熱門主題" />
       <TemplateTabs sortOptions={PopularSortOptions} />
       <TemplateList

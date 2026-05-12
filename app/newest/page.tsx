@@ -25,7 +25,7 @@ export default async function NewestTemplatesPage({
   ]);
 
   return (
-    <div className="container mx-auto px-20 py-8">
+    <div className="container mx-auto px-4 sm:px-20 py-8">
       <Headings title="最近更新" />
 
       <TemplateList

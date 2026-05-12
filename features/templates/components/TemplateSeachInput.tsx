@@ -20,7 +20,7 @@ export default function TemplateSeachInput() {
           router.push(`/search?search=${value}`);
         }
       }}
-      className="w-full max-w-md"
+      className="w-full max-w-[130px] sm:max-w-md "
     />
   );
 }

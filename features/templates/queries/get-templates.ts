@@ -4,7 +4,7 @@ import { cache } from "react";
 
 export const getTemplates = cache(async (parsed: ParsedSearchParams, orderBy?: string) => {
   const page = parsed.page;
-  const size = 2;
+  const size = 24;
   const skip = page * size;
 
   const where = {

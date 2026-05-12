@@ -24,7 +24,7 @@ export default function SignInPage() {
         title="Sign In"
         description="Sign in to your account"
         content={<SignInForm />}
-        className="max-w-[520px] w-[520px] self-center"
+        className="max-w-[520px] w-[90%] sm:w-[520px] self-center"
         footer={footer}
       />
     </div>

@@ -3,14 +3,12 @@ import Link from "next/link";
 import { HomePath, PopularTemplatesPath, NewestTemplatesPath, TagPath, signUpPath, signInPath, createPath } from "@/utils/path";
 import TemplateSeachInput from "@/features/templates/components/TemplateSeachInput";
 import { Button } from "@/components/ui/button";
-import { signOut } from "@/features/auth/actions/sign-out";
-import { Form } from "lucide-react";
-import { SubmitButton } from "./form/SubmitButton";
 import { getAuth } from "@/features/auth/queries/get-auth";
 import AccountDropdown from "./AccountDropdown";
+import { NavbarMobileNav } from "./NavbarMobileNav";
 
 export default async function Navbar() {
-  const { session, user } = await getAuth();
+  const { user } = await getAuth();
   const NavItems = [
     {
       label: "熱門",
@@ -33,19 +31,27 @@ export default async function Navbar() {
       />
     </>
   ) : (
-    <>
+    <div className="hidden items-center gap-4 md:flex">
       <Button asChild variant={"secondary"}>
         <Link href={signUpPath()}>Sign Up</Link>
       </Button>
       <Button asChild variant={"default"}>
         <Link href={signInPath()}>Sign In</Link>
       </Button>
-    </>
+    </div>
   );
 
   return (
-    <div className="h-20 flex items-center justify-between px-30 bg-background/50">
+    <div className="h-20 flex items-center justify-between sm:px-30 bg-background/50">
       <div className="flex items-center gap-4">
+        <NavbarMobileNav
+          navItems={NavItems}
+          guestAuth={
+            user
+              ? undefined
+              : { signUpHref: signUpPath(), signInHref: signInPath() }
+          }
+        />
         <Link href={HomePath()}>
           <Image
             src="/logo.png"
@@ -55,7 +61,7 @@ export default async function Navbar() {
             className="h-12 w-auto"
           />
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="hidden items-center gap-4 md:flex">
           {NavItems.map((item) => (
             <Link key={item.href} href={item.href}>
               {item.label}

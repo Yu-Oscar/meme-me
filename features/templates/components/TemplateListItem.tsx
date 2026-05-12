@@ -39,8 +39,7 @@ export default function TemplateListItem({ template, isBookmarked = false }: Tem
           id={template.id}
           isBookmarked={isBookmarked}
           className={cn(
-            "absolute top-2 right-2 transition-opacity",
-            isBookmarked ? "opacity-100" : "opacity-0 group-hover:opacity-100",
+            "absolute top-2 right-2",
           )}
         />
       </div>

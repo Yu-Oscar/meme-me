@@ -10,7 +10,7 @@ export default function SignUpPage() {
         title="Sign Up"
         description="create a new account"
         content={<SignUpForm />}
-        className="max-w-[520px] w-[520px] self-center"
+        className="max-w-[520px] w-[90%] sm:w-[520px] self-center"
         footer={
           <Link href={signInPath()} className="text-sm text-muted-foreground">
             Have a account? Sign In

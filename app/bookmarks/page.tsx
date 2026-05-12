@@ -9,7 +9,7 @@ export default async function BookmarksPage() {
   const bookmarkedTemplateIds = templates.map((t) => t.id);
 
   return (
-    <div className="container mx-auto px-20 py-8">
+    <div className="container mx-auto px-4 sm:px-20 py-8">
       <Headings title="我的收藏" />
 
       {templates.length === 0 ? (

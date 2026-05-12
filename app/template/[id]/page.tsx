@@ -65,7 +65,7 @@ export default async function TemplatePage({
         templateName={template.name}
         initialSettings={initialSettings}
       >
-        <div className="container mx-auto flex flex-1 flex-col gap-4 py-4 md:flex-row">
+        <div className="container px-4 mx-auto flex flex-1 flex-col gap-4 py-4 md:flex-row">
           <div className="flex w-full flex-col gap-4 md:w-[70%]">
             <MemeEditorStage
               imageAlt={template.name}

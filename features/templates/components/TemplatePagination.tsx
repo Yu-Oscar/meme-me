@@ -16,6 +16,8 @@ type TemplatePaginationProps = {
 export default function TemplatePagination({ metadata }: TemplatePaginationProps) {
   const [page, setPage] = useQueryStates(paginationParser, paginationOptions);
   return (
-    <Pagination page={page} setPage={setPage} metadata={metadata}/>
+    <div className="w-full">
+      <Pagination page={page} setPage={setPage} metadata={metadata} />
+    </div>
   );
 }
