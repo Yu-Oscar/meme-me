@@ -5,6 +5,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "@/components/ui/sonner";
 import RedirectToast from "@/components/RedirectToast";
@@ -58,10 +59,12 @@ export default function RootLayout({
           `}
         </Script>
         <NuqsAdapter>
-          <Navbar />
-          {children}
-
-          <Toaster expand />
+          <div className="flex min-h-dvh flex-col">
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <Toaster expand />
+          </div>
         </NuqsAdapter>
         <RedirectToast />
         <Analytics />
