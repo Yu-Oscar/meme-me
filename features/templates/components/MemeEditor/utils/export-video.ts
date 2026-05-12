@@ -9,6 +9,12 @@ import {
   triggerDownload,
   waitForFonts,
 } from "./draw-layer";
+import {
+  GIF_EXPORT_MAX_SPAN_SEC,
+  buildGifFrameSchedule,
+  isPastExportEnd,
+  resolveExportSpan,
+} from "./export-span";
 
 type ExportFormat = "webm" | "mp4";
 
@@ -83,10 +89,10 @@ export async function exportToVideo({
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas 2D context unavailable");
 
-  const duration = Number.isFinite(video.duration) ? video.duration : 0;
-  const startTime = clamp(trim?.startTime ?? 0, 0, duration);
-  const fallbackEnd = duration || startTime + 1;
-  const endTime = clamp(trim?.endTime ?? fallbackEnd, startTime, fallbackEnd);
+  const { startTime, endTime, spanSec } = resolveExportSpan({
+    mediaDurationSec: Number.isFinite(video.duration) ? video.duration : 0,
+    trim,
+  });
 
   const stream = canvas.captureStream(30);
   const recorder = new MediaRecorder(stream, {
@@ -136,15 +142,14 @@ export async function exportToVideo({
   composeFrame(ctx, video, video.currentTime, layers, padding, opts);
   recorder.start(100);
 
-  const span = Math.max(0.0001, endTime - startTime);
+  const span = Math.max(0.0001, spanSec);
   onProgress?.(0);
   const tick = () => {
     if (stopRequested) return;
     const t = video.currentTime;
     composeFrame(ctx, video, t, layers, padding, opts);
     onProgress?.(Math.max(0, Math.min(1, (t - startTime) / span)));
-    // Small slack: last decoded frame is often just shy of duration.
-    if (video.ended || t >= endTime - 1 / 60) {
+    if (isPastExportEnd(t, endTime, video.ended)) {
       onProgress?.(1);
       finishRecording();
       return;
@@ -165,7 +170,7 @@ export async function exportToVideo({
 
   const exportBudgetMs = Math.min(
     600_000,
-    Math.max(45_000, (endTime - startTime) * 1000 + 20_000),
+    Math.max(45_000, spanSec * 1000 + 20_000),
   );
   const timeoutErr = new Error("匯出逾時，請再試或改用 GIF");
   let watchdog: ReturnType<typeof setTimeout> | undefined;
@@ -209,8 +214,6 @@ type ExportGifOpts = {
   onProgress?: (done: number, total: number) => void;
 };
 
-const GIF_MAX_DURATION_SEC = 10;
-
 export async function exportToGif({
   video,
   layers,
@@ -218,7 +221,7 @@ export async function exportToGif({
   trim,
   filename,
   fps = 15,
-  maxDurationSec = GIF_MAX_DURATION_SEC,
+  maxDurationSec = GIF_EXPORT_MAX_SPAN_SEC,
   onProgress,
 }: ExportGifOpts) {
   await waitForFonts();
@@ -238,14 +241,13 @@ export async function exportToGif({
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
   if (!ctx) throw new Error("Canvas 2D context unavailable");
 
-  const duration = Number.isFinite(video.duration) ? video.duration : 0;
-  const startTime = clamp(trim?.startTime ?? 0, 0, duration);
-  const rawEnd = trim?.endTime ?? duration;
-  const cappedEnd = Math.min(rawEnd, startTime + maxDurationSec);
-  const endTime = clamp(cappedEnd, startTime, duration || startTime + 1);
-  const total = Math.max(0, endTime - startTime);
-  const frameCount = Math.max(1, Math.floor(total * fps));
-  const delay = Math.round(1000 / fps);
+  const { startTime, endTime } = resolveExportSpan({
+    mediaDurationSec: Number.isFinite(video.duration) ? video.duration : 0,
+    trim,
+    maxSpanSec: maxDurationSec,
+  });
+  const { times, delaysMs } = buildGifFrameSchedule(startTime, endTime, fps);
+  const frameCount = times.length;
 
   const wasPaused = video.paused;
   const restoreTime = video.currentTime;
@@ -254,7 +256,7 @@ export async function exportToGif({
   const gif = GIFEncoder();
   try {
     for (let i = 0; i < frameCount; i++) {
-      const t = startTime + i / fps;
+      const t = times[i]!;
       await seekTo(video, t);
       composeFrame(ctx, video, t, layers, padding, opts);
       const { data, width, height } = ctx.getImageData(
@@ -265,7 +267,10 @@ export async function exportToGif({
       );
       const palette = quantize(data, 256);
       const index = applyPalette(data, palette);
-      gif.writeFrame(index, width, height, { palette, delay });
+      gif.writeFrame(index, width, height, {
+        palette,
+        delay: delaysMs[i]!,
+      });
       onProgress?.(i + 1, frameCount);
       if (i % 2 === 0) {
         await yieldToBrowser();
@@ -313,9 +318,4 @@ function seekTo(video: HTMLVideoElement, t: number): Promise<void> {
 
 function yieldToBrowser(): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, 0));
-}
-
-function clamp(v: number, lo: number, hi: number): number {
-  if (!Number.isFinite(v)) return lo;
-  return Math.max(lo, Math.min(hi, v));
 }

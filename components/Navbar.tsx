@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { HomePath, PopularTemplatesPath, NewestTemplatesPath, TagPath, signUpPath, signInPath } from "@/utils/path";
+import { HomePath, PopularTemplatesPath, NewestTemplatesPath, TagPath, signUpPath, signInPath, createPath } from "@/utils/path";
 import TemplateSeachInput from "@/features/templates/components/TemplateSeachInput";
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/features/auth/actions/sign-out";
@@ -61,6 +61,9 @@ export default async function Navbar() {
               {item.label}
             </Link>
           ))}
+          <Button asChild variant={"default"} size={"sm"}>
+            <Link href={createPath()}>自製 meme</Link>
+          </Button>
         </div>
       </div>
       <div className="flex items-center gap-4">
