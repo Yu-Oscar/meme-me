@@ -10,7 +10,10 @@ if (!connectionString) {
   );
 }
 
-const adapter = new PrismaPg({ connectionString });
+const adapter = new PrismaPg({
+  connectionString,
+  max: 3,
+});
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
