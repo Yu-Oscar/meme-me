@@ -7,7 +7,7 @@ export default function TagItem({ tag }: TagItemProps) {
     return (
       <Link
         key={tag.tag}
-        href={`/search?q=${encodeURIComponent(tag.tag)}`}
+        href={`/search?search=${encodeURIComponent(tag.tag)}`}
         className="group block"
       >
         <div className="bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 hover:border-primary-500 rounded-lg p-3 sm:p-4 transition-all">

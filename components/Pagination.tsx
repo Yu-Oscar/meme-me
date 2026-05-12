@@ -10,6 +10,7 @@ type Page= {
 type PaginationProps = {
   page: Page;
   setPage: (page: Page) => void;
+  pageSize: number;
   metadata: {
     count: number;
     hasNextPage: boolean;
@@ -20,12 +21,13 @@ type PaginationProps = {
 export default function Pagination({
   page,
   setPage,
+  pageSize,
   metadata,
   className,
 }: PaginationProps) {
 
     const WINDOW = 5;
-    const lastPageIndex = Math.ceil(metadata.count / 2) - 1;
+    const lastPageIndex = Math.max(0, Math.ceil(metadata.count / pageSize) - 1);
     let start = page.page - Math.floor(WINDOW / 2);
     let end = start + WINDOW - 1;
     if (start < 0) {

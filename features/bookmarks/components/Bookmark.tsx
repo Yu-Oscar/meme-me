@@ -30,10 +30,15 @@ export default function Bookmark({ id, isBookmarked, className }: BookmarkProps)
       )}
     >
       {pending ? (
-        <LucideLoaderCircle className="animate-spin text-primary" />
+        <LucideLoaderCircle className="animate-spin text-primary size-5" />
       ) : (
         <LucideBookmark
-          className={isBookmarked ? "fill-primary text-primary" : "fill-transparent text-neutral-400"}
+          className={cn(
+            isBookmarked
+              ? "fill-primary text-primary"
+              : "fill-transparent text-neutral-400",
+            "size-5",
+          )}
         />
       )}
     </button>
