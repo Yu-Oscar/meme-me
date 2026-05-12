@@ -23,6 +23,15 @@ type Props = {
 
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 
+/** Touch / pen never get mouse `detail` or reliable `dblclick`; detect double-tap on pointerup. */
+const TAP_MAX_GAP_MS = 420;
+const TAP_MAX_DIST_PX = 48;
+const TAP_MOVE_BREAK_PX = 16;
+
+function isTouchLikePointer(pointerType: string) {
+  return pointerType === "touch" || pointerType === "pen";
+}
+
 export default function TextLayer({
   layer,
   isSelected,
@@ -34,6 +43,13 @@ export default function TextLayer({
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
+  const lastTapRef = useRef<{ t: number; x: number; y: number } | null>(null);
+  const tapGestureRef = useRef<{
+    pointerId: number;
+    downX: number;
+    downY: number;
+    moved: boolean;
+  } | null>(null);
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
   const resizeStartRef = useRef<{
     width: number;
@@ -94,15 +110,17 @@ export default function TextLayer({
     if (!el) return;
     if (isEditing) {
       if (el.textContent !== layer.text) el.textContent = layer.text;
-      el.focus();
-      const range = document.createRange();
-      range.selectNodeContents(el);
-      const sel = window.getSelection();
-      sel?.removeAllRanges();
-      sel?.addRange(range);
-    } else {
-      if (el.textContent !== layer.text) el.textContent = layer.text || "";
+      const id = requestAnimationFrame(() => {
+        el.focus();
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+      });
+      return () => cancelAnimationFrame(id);
     }
+    if (el.textContent !== layer.text) el.textContent = layer.text || "";
   }, [isEditing, layer.text]);
 
   const handleKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
@@ -147,12 +165,95 @@ export default function TextLayer({
       tabIndex={0}
       aria-label={`Text layer: ${layer.text || "empty"}`}
       onKeyDown={handleKeyDown}
-      onPointerDown={drag.onPointerDown}
-      onPointerMove={drag.onPointerMove}
-      onPointerUp={drag.onPointerUp}
-      onPointerCancel={drag.onPointerCancel}
+      onPointerDown={(e) => {
+        if (isEditing) {
+          drag.onPointerDown(e);
+          return;
+        }
+        if (e.detail === 2) {
+          e.preventDefault();
+          e.stopPropagation();
+          lastTapRef.current = null;
+          tapGestureRef.current = null;
+          setIsEditing(true);
+          return;
+        }
+        if (isTouchLikePointer(e.pointerType)) {
+          tapGestureRef.current = {
+            pointerId: e.pointerId,
+            downX: e.clientX,
+            downY: e.clientY,
+            moved: false,
+          };
+        } else {
+          tapGestureRef.current = null;
+        }
+        drag.onPointerDown(e);
+      }}
+      onPointerMove={(e) => {
+        const g = tapGestureRef.current;
+        if (
+          g &&
+          e.pointerId === g.pointerId &&
+          isTouchLikePointer(e.pointerType)
+        ) {
+          const dx = e.clientX - g.downX;
+          const dy = e.clientY - g.downY;
+          if (
+            dx * dx + dy * dy >
+            TAP_MOVE_BREAK_PX * TAP_MOVE_BREAK_PX
+          ) {
+            g.moved = true;
+          }
+        }
+        drag.onPointerMove(e);
+      }}
+      onPointerUp={(e) => {
+        drag.onPointerUp(e);
+        if (isEditing) return;
+        const g = tapGestureRef.current;
+        if (
+          !g ||
+          e.pointerId !== g.pointerId ||
+          !isTouchLikePointer(e.pointerType)
+        ) {
+          return;
+        }
+        tapGestureRef.current = null;
+        if (g.moved) {
+          lastTapRef.current = null;
+          return;
+        }
+        const now = performance.now();
+        const prev = lastTapRef.current;
+        const x = e.clientX;
+        const y = e.clientY;
+        if (
+          prev &&
+          now - prev.t < TAP_MAX_GAP_MS &&
+          Math.hypot(x - prev.x, y - prev.y) < TAP_MAX_DIST_PX
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
+          lastTapRef.current = null;
+          setIsEditing(true);
+          return;
+        }
+        lastTapRef.current = { t: now, x, y };
+      }}
+      onPointerCancel={(e) => {
+        drag.onPointerCancel(e);
+        const g = tapGestureRef.current;
+        if (g && e.pointerId === g.pointerId) {
+          tapGestureRef.current = null;
+          lastTapRef.current = null;
+        }
+      }}
       onDoubleClick={(e) => {
+        e.preventDefault();
         e.stopPropagation();
+        lastTapRef.current = null;
+        tapGestureRef.current = null;
         setIsEditing(true);
       }}
       onFocus={onSelect}
