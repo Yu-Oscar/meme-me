@@ -73,10 +73,21 @@ export default function EditorStage({ imageAlt, className }: Props) {
     [],
   );
 
-  const aspectRatio =
-    mediaDims && mediaDims.h > 0 ? mediaDims.w / mediaDims.h : null;
-  const topPct = aspectRatio ? (padding.top / aspectRatio) * 100 : 0;
-  const bottomPct = aspectRatio ? (padding.bottom / aspectRatio) * 100 : 0;
+  const mw = mediaDims && mediaDims.w > 0 ? mediaDims.w : 0;
+  const mh = mediaDims && mediaDims.h > 0 ? mediaDims.h : 0;
+  const canvasH = mw && mh ? mh + padding.top * mh + padding.bottom * mh : 0;
+  const layoutLocked = mw > 0 && mh > 0 && canvasH > 0;
+  /** Match `computeCanvasSize` / `composeFrame`: same fractions as export, not %-of-width padding. */
+  const mediaInsetStyle = layoutLocked
+    ? {
+        position: "absolute" as const,
+        left: 0,
+        width: "100%",
+        top: `${((padding.top * mh) / canvasH) * 100}%`,
+        height: `${(mh / canvasH) * 100}%`,
+        objectFit: "fill" as const,
+      }
+    : undefined;
 
   return (
     <div
@@ -88,8 +99,9 @@ export default function EditorStage({ imageAlt, className }: Props) {
       style={{
         touchAction: "pan-y",
         background: padding.color,
-        paddingTop: `${topPct}%`,
-        paddingBottom: `${bottomPct}%`,
+        ...(layoutLocked
+          ? { aspectRatio: `${mw} / ${canvasH}` }
+          : undefined),
       }}
     >
       {mediaKind === "video" ? (
@@ -119,7 +131,10 @@ export default function EditorStage({ imageAlt, className }: Props) {
           onPointerDown={(e) => {
             if (e.target === e.currentTarget) onSelect(null);
           }}
-          className="block h-auto w-full select-none"
+          className={
+            layoutLocked ? "absolute select-none" : "block h-auto w-full select-none"
+          }
+          style={mediaInsetStyle}
         />
       ) : (
         /* eslint-disable-next-line @next/next/no-img-element */
@@ -138,7 +153,10 @@ export default function EditorStage({ imageAlt, className }: Props) {
           onPointerDown={(e) => {
             if (e.target === e.currentTarget) onSelect(null);
           }}
-          className="block h-auto w-full select-none"
+          className={
+            layoutLocked ? "absolute select-none" : "block h-auto w-full select-none"
+          }
+          style={mediaInsetStyle}
         />
       )}
 
