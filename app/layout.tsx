@@ -133,6 +133,17 @@ export default function RootLayout({
         inter.variable,
       )}
     >
+      {/* Native <head> script so AdSense crawlers see the exact snippet in
+          the initial HTML. next/script afterInteractive only left a preload. */}
+      <head>
+        {adsEnabled && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+            crossOrigin="anonymous"
+          />
+        )}
+      </head>
       <body className="min-h-full flex flex-col bg-popover">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-D1BPB4LCN8"
@@ -146,14 +157,6 @@ export default function RootLayout({
             gtag('config', 'G-D1BPB4LCN8');
           `}
         </Script>
-        {adsEnabled && (
-          <Script
-            id="adsense-loader"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        )}
         <OrganizationJsonLd
           name={SITE_NAME}
           url={SITE_URL}
