@@ -34,6 +34,7 @@ export default function HeroCarousel({ templates }: HeroCarouselProps) {
                   template={template}
                   width={1000}
                   height={1000}
+                  sizes="(min-width: 1024px) 30vw, 45vw"
                   className="aspect-video w-full h-full object-contain"
                 />
             </Link>
