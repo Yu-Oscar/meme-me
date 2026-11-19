@@ -8,12 +8,35 @@ All numbers below were measured on 2026-11-19.
 
 Shipped on 2026-11-19 to fix the exhausted Vercel Image Optimization quota (5K of 5K transformations):
 
-- `next.config.ts`: optimized images are cached for 31 days instead of 4 hours, only five widths are generated (256, 384, 640, 828, 1200), and the optimizer only accepts files from the `templates` bucket.
+- `next.config.ts`: optimized images are cached for 31 days instead of 4 hours, a single 640 px width is generated (see the next section), and the optimizer only accepts files from the `templates` bucket.
 - `features/templates/components/HeroCarousel.tsx`: the hero image has a `sizes` value, so it no longer requests 1080 and 2048 px variants.
 - `components/Navbar.tsx`: the logo is `unoptimized`.
 - `vercel.json`: functions run in `hnd1` (Tokyo), next to the Supabase database in `ap-northeast-1`. They previously ran in `iad1` (US East).
 
 One consequence to remember: a file overwritten at the same URL can show its old version for up to 31 days. Upload replacements under a new path.
+
+### Optional, after the Vercel quota resets
+
+While the quota is exhausted, every image variant that is not already cached returns 402 and the visitor sees the alt text. Measured on 2026-11-19 across all 119 image templates, the number that still loaded at each width was:
+
+- 256 px: 15
+- 384 px: 8
+- 640 px: 61
+- 828 px: 0
+- 1200 px: 1
+
+So `next.config.ts` serves only the 640 px width for now. The 58 images with no cached 640 px variant stay broken until the quota resets, then fix themselves with no change needed.
+
+Nothing has to be changed back. One width is a valid permanent setting and uses the fewest transformations (at most 119 a month). The cost is that hero images are slightly soft on large high-resolution screens, and the small "related" thumbnails are heavier than they need to be.
+
+To improve both, once the Image Optimization usage on the Vercel dashboard has reset, set this in `next.config.ts`:
+
+```ts
+deviceSizes: [640, 828, 1200],
+imageSizes: [256, 384],
+```
+
+That allows at most 595 transformations a month, still well inside the 5K allowance.
 
 ## 1. Cut Supabase egress (do this next)
 
