@@ -129,6 +129,7 @@ export default async function TemplatePage({
       slot={AD_SLOTS.templateSidebar}
       format="auto"
       minHeight={250}
+      label="側欄廣告"
       className="rounded-lg"
     />
   );
@@ -137,6 +138,7 @@ export default async function TemplatePage({
       slot={AD_SLOTS.templateDescription}
       format="fluid"
       minHeight={120}
+      label="內文廣告"
       className="rounded-lg"
     />
   );

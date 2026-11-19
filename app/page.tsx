@@ -9,6 +9,8 @@ import TagList from "@/features/tags/components/TagList";
 import { TagPath, NewestTemplatesPath, PopularTemplatesPath } from "@/utils/path";
 import { getAuth } from "@/features/auth/queries/get-auth";
 import { getBookmarkedTemplateIds } from "@/features/bookmarks/queries/get-bookmarked-template-ids";
+import { AD_SLOTS } from "@/lib/ads";
+import AdSlot from "@/components/ads/AdSlot";
 
 export default async function Home() {
   const { user } = await getAuth();
@@ -46,6 +48,15 @@ export default async function Home() {
           <div className="col-span-1">
             <Headings title="熱門標籤" href={TagPath()} />
             <TagList tags={homeTags} />
+          </div>
+          <div className="col-span-1 flex items-stretch">
+            <AdSlot
+              slot={AD_SLOTS.homeTagsSidebar}
+              format="auto"
+              minHeight={280}
+              label="首頁側欄廣告"
+              className="h-full rounded-lg"
+            />
           </div>
         </div>
 

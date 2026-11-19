@@ -12,13 +12,6 @@ export const AD_SLOTS = {
   templateSidebar: process.env.NEXT_PUBLIC_ADSENSE_SLOT_TEMPLATE_SIDEBAR,
   /** In-article unit under the template description. */
   templateDescription: process.env.NEXT_PUBLIC_ADSENSE_SLOT_TEMPLATE_DESCRIPTION,
-  /** In-feed unit inserted into template grids. */
-  listInFeed: process.env.NEXT_PUBLIC_ADSENSE_SLOT_LIST_INFEED,
+  /** Homepage slot beside 熱門標籤 (right column of the two-col grid). */
+  homeTagsSidebar: process.env.NEXT_PUBLIC_ADSENSE_SLOT_HOME_TAGS_SIDEBAR,
 } as const;
-
-/** `data-ad-layout-key` copied from the in-feed ad unit in AdSense. */
-export const ADSENSE_INFEED_LAYOUT_KEY =
-  process.env.NEXT_PUBLIC_ADSENSE_INFEED_LAYOUT_KEY;
-
-/** How many template cards between in-feed ads. */
-export const LIST_INFEED_EVERY = 8;
