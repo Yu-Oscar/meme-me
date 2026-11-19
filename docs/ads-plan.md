@@ -51,15 +51,15 @@ Branch workflow:
   - Display, responsive: template sidebar
   - In-article: below template description
   - Display, responsive: homepage beside 熱門標籤
-- [ ] Add env vars on Vercel (production only; leave preview/dev unset so no
-      ads render there):
-  - `NEXT_PUBLIC_ADSENSE_CLIENT=ca-pub-XXXXXXXXXXXXXXXX`
+- [x] Publisher id wired: `ca-pub-2411064449969140` (default in `lib/ads.ts`).
+      Loader script ships on deploy. Slot markup still waits for slot env vars.
+- [x] `public/ads.txt` filled with
+      `google.com, pub-2411064449969140, DIRECT, f08c47fec0942fa0`.
+- [ ] Add slot env vars on Vercel after creating ad units (production only):
   - `NEXT_PUBLIC_ADSENSE_SLOT_TEMPLATE_SIDEBAR=XXXXXXXXXX`
   - `NEXT_PUBLIC_ADSENSE_SLOT_TEMPLATE_DESCRIPTION=XXXXXXXXXX`
   - `NEXT_PUBLIC_ADSENSE_SLOT_HOME_TAGS_SIDEBAR=XXXXXXXXXX`
-- [ ] Replace the placeholder line in `public/ads.txt` with
-      `google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0`.
-- [ ] Redeploy.
+- [ ] Redeploy after setting slot ids.
 
 ## Phase 3: after launch
 

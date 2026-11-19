@@ -1,3 +1,1 @@
-# Replace the line below with the one shown in AdSense > Sites > ads.txt.
-# Format: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
-# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+google.com, pub-2411064449969140, DIRECT, f08c47fec0942fa0

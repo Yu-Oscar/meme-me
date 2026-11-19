@@ -1,9 +1,11 @@
-// Ad configuration. Every value comes from NEXT_PUBLIC_* env vars so that
-// preview and local builds, where they are unset, render no ads at all.
+// Ad configuration. The publisher id is public (it appears in every page
+// source). Slot ids stay env-only so empty slots do not render until units
+// exist in AdSense and are configured on Vercel.
 // NEXT_PUBLIC_ vars are inlined at build time, so each one must be read with a
 // static property access (no dynamic process.env[key]).
 
-export const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+export const ADSENSE_CLIENT =
+  process.env.NEXT_PUBLIC_ADSENSE_CLIENT ?? "ca-pub-2411064449969140";
 
 export const adsEnabled = Boolean(ADSENSE_CLIENT);
 
