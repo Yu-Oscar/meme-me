@@ -33,6 +33,17 @@ export default function Footer() {
           </Link>
         </Button>
       </nav>
+      <nav
+        aria-label="Legal"
+        className="mx-auto mt-2 flex max-w-6xl flex-wrap items-center justify-center gap-4 px-4 text-xs text-neutral-400"
+      >
+        <Link href="/privacy" className="hover:text-neutral-100 transition-colors">
+          私隱政策
+        </Link>
+        <Link href="/terms" className="hover:text-neutral-100 transition-colors">
+          使用條款
+        </Link>
+      </nav>
     </footer>
   );
 }

@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { ADSENSE_CLIENT, adsEnabled } from "@/lib/ads";
 import {
   SITE_URL,
   SITE_NAME,
@@ -145,6 +146,14 @@ export default function RootLayout({
             gtag('config', 'G-D1BPB4LCN8');
           `}
         </Script>
+        {adsEnabled && (
+          <Script
+            id="adsense-loader"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
         <OrganizationJsonLd
           name={SITE_NAME}
           url={SITE_URL}

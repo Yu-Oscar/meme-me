@@ -20,6 +20,8 @@ import {
   CreativeWorkJsonLd,
 } from "@/components/JsonLd";
 import { SITE_NAME, SITE_OG_IMAGE, SITE_URL } from "@/lib/site";
+import { AD_SLOTS } from "@/lib/ads";
+import AdSlot from "@/components/ads/AdSlot";
 
 export async function generateMetadata({
   params,
@@ -122,6 +124,23 @@ export default async function TemplatePage({
     </>
   );
 
+  const sidebarAd = (
+    <AdSlot
+      slot={AD_SLOTS.templateSidebar}
+      format="auto"
+      minHeight={250}
+      className="rounded-lg"
+    />
+  );
+  const descriptionAd = (
+    <AdSlot
+      slot={AD_SLOTS.templateDescription}
+      format="fluid"
+      minHeight={120}
+      className="rounded-lg"
+    />
+  );
+
   const recommendedSection =
     recommended.length > 0 ? (
       <section className="flex flex-col gap-3">
@@ -155,9 +174,11 @@ export default async function TemplatePage({
               template={template}
               isBookmarked={isBookmarked ?? false}
             />
+            {descriptionAd}
           </div>
           <div className="flex w-full shrink-0 flex-col gap-6 md:w-[30%]">
             <MemeEditorSidebar />
+            {sidebarAd}
             {recommendedSection}
           </div>
         </div>
@@ -180,8 +201,10 @@ export default async function TemplatePage({
             template={template}
             isBookmarked={isBookmarked ?? false}
           />
+          {descriptionAd}
         </div>
         <div className="flex w-full shrink-0 flex-col gap-6 md:w-[30%]">
+          {sidebarAd}
           {recommendedSection}
         </div>
       </div>

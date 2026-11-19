@@ -21,6 +21,7 @@ export default async function BookmarksPage() {
           <TemplateList
             templates={templates}
             bookmarkedTemplateIds={bookmarkedTemplateIds}
+            showAds={false}
           />
         </div>
       )}
