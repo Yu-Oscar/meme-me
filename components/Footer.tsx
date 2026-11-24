@@ -34,9 +34,15 @@ export default function Footer() {
         </Button>
       </nav>
       <nav
-        aria-label="Legal"
+        aria-label="Site links"
         className="mx-auto mt-2 flex max-w-6xl flex-wrap items-center justify-center gap-4 px-4 text-xs text-neutral-400"
       >
+        <Link href="/about" className="hover:text-neutral-100 transition-colors">
+          關於我們
+        </Link>
+        <Link href="/contact" className="hover:text-neutral-100 transition-colors">
+          聯絡我們
+        </Link>
         <Link href="/privacy" className="hover:text-neutral-100 transition-colors">
           私隱政策
         </Link>
